@@ -20,12 +20,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.JButton;
 
+import sun.util.calendar.CalendarUtils;
+import sun.util.resources.cldr.CalendarData;
 import window.cars.ListCars;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
@@ -46,21 +50,35 @@ public class FormFvRow extends JDialog {
 	
 	Vector<String> carParams;
 	
+	int isEmpty;
+	Vector<String> row;
+	
 	
 	public FormFvRow() {
+		isEmpty=1;
+		
+//		Inicjalizacja zmiennych w klasie
+
+		carParams=new Vector<String>();
+		row=new Vector<String>();
+
+//		Ustawienie Layoutu, wielkoœci okna, w³aœciwoœci i po³o¿enie okna
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 		
 		setSize(450, 300);
-		carParams=new Vector<String>();
-		
 		setModalityType(ModalityType.APPLICATION_MODAL);//blokowanie prze³¹czania w dó³
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		
-		
+//		************************************************************
+
+//		Main panel
 		JPanel main = new JPanel();
 		getContentPane().add(main);
 		
+		
+		
+//		Car panel
 		JPanel car = new JPanel();
 		main.add(car);
 		car.setPreferredSize(new Dimension(200, 35));
@@ -72,46 +90,11 @@ public class FormFvRow extends JDialog {
 		textCar = new JTextField();
 		textCar.setEnabled(false);
 		car.add(textCar);
-		
-		textCar.addMouseListener(new MouseListener() {
 			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-				ListCars list=new ListCars();
-				
-				carParams =list.selectCar();
-				textCar.setText(carParams.get(0)+" "+carParams.get(1));
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
 		textCar.setColumns(10);
+//	***********************************************
 		
+//		Date panel
 		JPanel date = new JPanel();
 		main.add(date);
 		date.setPreferredSize(new Dimension(100, 38));
@@ -127,6 +110,9 @@ public class FormFvRow extends JDialog {
 		datePicker.setPreferredSize(new Dimension(202, 34));
 
 		date.add(datePicker);
+//		*******************************************
+		
+//		Hours panels
 		
 		JPanel hours = new JPanel();
 		hours.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -183,6 +169,10 @@ public class FormFvRow extends JDialog {
 		textHour200.setColumns(10);
 		hour200.add(textHour200);
 		
+//********************************************	
+		
+//		Params panel
+		
 		JPanel params = new JPanel();
 		getContentPane().add(params);
 		
@@ -238,14 +228,50 @@ public class FormFvRow extends JDialog {
 		textComment = new JTextField();
 		textComment.setColumns(10);
 		comment.add(textComment);
+		
+		textCar.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+				ListCars list=new ListCars();
+				
+				carParams =list.selectCar();
+				textCar.setText(carParams.get(1)+" "+carParams.get(2));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	
 	}
 	
 	public Vector<String> addRow(){
 		
 		setTitle("Dodaj pozycje faktyry");
-		
-		Vector<String> row=new Vector<String>();
+		row=new Vector<String>();
 		
 		JButton btnAdd = new JButton("Dodaj");
 		getContentPane().add(btnAdd);
@@ -255,27 +281,119 @@ public class FormFvRow extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Date selectedDate = (Date) datePicker.getModel().getValue();
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				
-				row.add(carParams.get(0));//1
-				row.add(carParams.get(1));//2
-				row.add(carParams.get(2));//3
-				row.add(df.format(selectedDate));//4
-				row.add(textWhatDo.getText());//5
-				row.add(textHour.getText());//6
-				row.add(textHour50.getText());//7
-				row.add(textHour100.getText());//8
-				row.add(textHour200.getText());//9
-				row.add(textKm.getText());//10
-				row.add(textIdle.getText());//11
-				row.add(textComment.getText());//12
+				isSet();
 				
+					if(isEmpty==0){
+					row=rowSet();
+	
+					dispose();
+					}
+				};
+		});
+		
+		setVisible(true);
+		
+		return row;
+	}
+	
+	public Vector<String> editRow(Vector<String> rowEdit){
+		
+		setTitle("Modyfikuj pozycje faktury");
+		
+		row=new Vector<String>();
+		
+		carParams.add(rowEdit.get(0));
+		carParams.add(rowEdit.get(1));
+		carParams.add(rowEdit.get(2));
+		
+		textCar.setText(carParams.get(1)+" "+carParams.get(2));
+		
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c=Calendar.getInstance();
+		
+		try {
+			c.setTime(df.parse(rowEdit.get(3)));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		datePicker.getModel().setYear(c.get(Calendar.YEAR));
+		datePicker.getModel().setMonth(c.get(Calendar.MONTH));
+		datePicker.getModel().setDay(c.get(Calendar.DAY_OF_MONTH));
+		datePicker.getModel().setSelected(true);
+				
+		textWhatDo.setText(rowEdit.get(4));
+		textHour.setText(rowEdit.get(5));
+		textHour50.setText(rowEdit.get(6));
+		textHour100.setText(rowEdit.get(7));
+		textHour200.setText(rowEdit.get(8));
+		textKm.setText(rowEdit.get(9));
+		textIdle.setText(rowEdit.get(10));
+		textComment.setText(rowEdit.get(11));	
+		
+		
+		JButton btnEdit = new JButton("Zmieñ");
+		getContentPane().add(btnEdit);
+		
+		btnEdit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				isSet();
+				
+				if(isEmpty==0){
+				row=rowSet();
+				row.add(rowEdit.get(12));
 				dispose();
+				}
+
 			}
 		});
 		
 		setVisible(true);
+		
+		return row;
+	}
+	
+	private void isSet(){
+
+		if(carParams.size()==0){
+		isEmpty=1;
+		JOptionPane.showMessageDialog(null, "Samochód nie zoasta³ wybrany");
+		}else{
+		if(!datePicker.getModel().isSelected()){
+			isEmpty=1;
+			JOptionPane.showMessageDialog(null, "Data nie wybrana");
+			}else{
+			isEmpty=0;	
+			}
+		}
+	}
+	
+	private Vector<String> rowSet(){
+		
+		Vector<String> row=new Vector<String>();
+		
+		Date selectedDate = (Date) datePicker.getModel().getValue();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		
+		row.add(carParams.get(0));//1
+		row.add(carParams.get(1));//2
+		row.add(carParams.get(2));//3
+		row.add(df.format(selectedDate));//4
+		row.add(textWhatDo.getText());//5
+		row.add(textHour.getText());//6
+		row.add(textHour50.getText());//7
+		row.add(textHour100.getText());//8
+		row.add(textHour200.getText());//9
+		row.add(textKm.getText());//10
+		row.add(textIdle.getText());//11
+		row.add(textComment.getText());//12
 		
 		return row;
 	}

@@ -2,7 +2,10 @@ package models;
 
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
+
+import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
 
 public class FvRowModel extends AbstractTableModel {
 	
@@ -39,7 +42,7 @@ public class FvRowModel extends AbstractTableModel {
 		String[] data={
 			"Jelcz",
 			"Era 1234",
-			"11-11-2014",
+			"2014-02-25",
 			"Jeüdzi≥ tu i tam",
 			"8",
 			"8",
@@ -99,5 +102,51 @@ public class FvRowModel extends AbstractTableModel {
 		
 		cache.add(rowSt);
 		fireTableChanged(null);
+	}
+	
+	public void editRow(Vector<String> row){
+	
+		int rowId=Integer.valueOf(row.get(12));
+		
+		carId.set(rowId, row.get(0));
+		
+		String[] rowSt={
+				row.get(1),
+				row.get(2),
+				row.get(3),
+				row.get(4),
+				row.get(5),
+				row.get(6),
+				row.get(7),
+				row.get(8),
+				row.get(9),
+				row.get(10),
+				row.get(11)
+				};
+		
+		cache.set(rowId, rowSt);
+		fireTableChanged(null);
+	}
+	
+	public void delRow(int rowNr){
+		
+		carId.remove(rowNr);
+		
+		cache.remove(rowNr);
+		fireTableChanged(null);
+	}
+	
+	public Vector<String> getRow(int rowNr){
+		
+		Vector<String> row=new Vector<String>();
+		row.add(carId.get(rowNr));
+		
+		for(int i=0; i<cache.get(rowNr).length; i++){
+			row.add(cache.get(rowNr)[i]);
+		}
+		
+		row.add(String.valueOf(rowNr));	
+		
+		return row;
 	}
 }

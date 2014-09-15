@@ -4,6 +4,7 @@ package window.fv;
 
 import javax.swing.JDialog;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,6 +29,7 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 
 public class FormFv extends JDialog {
@@ -110,6 +112,35 @@ public class FormFv extends JDialog {
 				FormFvRow row=new FormFvRow();
 				fvModel.addRow(row.addRow());
 				
+			}
+		});
+		
+		menuEdit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+							
+				int selectedRow = table.getSelectedRow();
+				
+				FormFvRow row=new FormFvRow();
+				
+				if(selectedRow>=0){
+	
+				fvModel.editRow(row.editRow(fvModel.getRow(selectedRow)));
+				}
+			}
+		});
+		
+		menuDel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				int selectedRow = table.getSelectedRow();
+				
+				fvModel.delRow(selectedRow);
 			}
 		});
 		
