@@ -22,39 +22,21 @@ public class FvRowModel extends AbstractTableModel {
 		colCount=11;
 		
 		String[] hedd={
-				"Marka",
-				"Nr rej",
-				"Data",
-				"Co robi≥",
-				"Il. godzin",
-				"Il. godzin 50",
-				"Il. godzin 100",
-				"Il. godzin 200",
-				"Il. km",
-				"Godz. post.",
-				"Uwagi"
+				"Marka",			//1
+				"Nr rej",			//2
+				"Data",				//3
+				"Co robi≥",			//4
+				"Il. godzin",		//5
+				"Il. godzin 50",	//6
+				"Il. godzin 100",	//7
+				"Il. godzin 200",	//8
+				"Il. km",			//9
+				"Godz. post.",		//10
+				"Uwagi"				//11
 		};
 		
 		hedders=hedd;
-		
-		
-		
-		String[] data={
-			"Jelcz",
-			"Era 1234",
-			"2014-02-25",
-			"Jeüdzi≥ tu i tam",
-			"8",
-			"8",
-			"8",
-			"8",
-			"24",
-			"4",
-			"Jakieú tam uwagi"
-		};
-		
-		cache.add(data);		
-		carId.add("1");
+
 	}
 	
 	@Override
@@ -84,6 +66,9 @@ public class FvRowModel extends AbstractTableModel {
 	
 	public void addRow(Vector<String> row){
 		
+		if(row.size()>0){
+			
+		
 		carId.add(row.get(0));
 		
 		String[] rowSt={
@@ -102,9 +87,12 @@ public class FvRowModel extends AbstractTableModel {
 		
 		cache.add(rowSt);
 		fireTableChanged(null);
+		}
 	}
 	
 	public void editRow(Vector<String> row){
+		
+		if(row.size()>0){
 	
 		int rowId=Integer.valueOf(row.get(12));
 		
@@ -126,6 +114,7 @@ public class FvRowModel extends AbstractTableModel {
 		
 		cache.set(rowId, rowSt);
 		fireTableChanged(null);
+		}
 	}
 	
 	public void delRow(int rowNr){

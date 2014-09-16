@@ -66,7 +66,8 @@ public class ListFv extends JInternalFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			FormFv car=new FormFv();
+			qtm.addFv();
+			qtm.getFv();
 		}
 	});
     

@@ -243,8 +243,14 @@ public class FormFvRow extends JDialog {
 				
 				ListCars list=new ListCars();
 				
-				carParams =list.selectCar();
+				Vector<String> tmp=new Vector<String>();
+				tmp=list.selectCar();
+				
+				if(tmp.size()>0)
+				{
+				carParams =tmp;
 				textCar.setText(carParams.get(1)+" "+carParams.get(2));
+				}
 			}
 			
 			@Override
