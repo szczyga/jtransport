@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="lib/jdatepicker-1.3.2.jar;lib/mysql-connector-java-5.1.32-bin.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.8" sourcefiles="src/MySQL/MySQL_Fv.java" sourcepath="src;lib" splitindex="true" use="true" version="true"/>
+    </target>
+</project>

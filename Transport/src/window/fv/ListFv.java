@@ -3,6 +3,7 @@ package window.fv;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -23,12 +24,16 @@ public class ListFv extends JInternalFrame {
 	
 	private static MySQL_Fv qtm;
 	
+
 	public ListFv() {
 		// TODO Auto-generated constructor stub
     super("Lista faktur");
     setSize(600, 600);
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     
+    JPopupMenu popupMenu;
+	JMenuItem menuAdd, menuEdit, menuDel;
+	
     qtm=new MySQL_Fv();
     
     setBorder(null);
@@ -45,10 +50,10 @@ public class ListFv extends JInternalFrame {
     Fun.resizeColumnWidth(table);
     
 // *********Menu siatki*************
-    JPopupMenu popupMenu = new JPopupMenu();
-	JMenuItem menuAdd = new JMenuItem("Dodaj");
-	JMenuItem menuEdit = new JMenuItem("Edytuj");
-	JMenuItem menuDel = new JMenuItem("Usuñ");
+    popupMenu = new JPopupMenu();
+	menuAdd = new JMenuItem("Dodaj");
+	menuEdit = new JMenuItem("Edytuj");
+	menuDel = new JMenuItem("Usuñ");
 	
 	popupMenu.add(menuAdd);
 	popupMenu.add(menuEdit);
@@ -76,6 +81,14 @@ public class ListFv extends JInternalFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			
+			int selectedRow = table.getSelectedRow();
+			
+			if(selectedRow>-1){
+			
+			qtm.editFv(qtm.getId(selectedRow));
+			qtm.getFv();
+			}
 		}
 	});
 	
@@ -84,6 +97,13 @@ public class ListFv extends JInternalFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			int selectedRow = table.getSelectedRow();
+			
+			if(selectedRow>-1){
+				
+			qtm.delFv(qtm.getId(selectedRow));
+			qtm.getFv();
+			}
 		}
 	});
     

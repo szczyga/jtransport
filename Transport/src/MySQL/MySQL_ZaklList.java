@@ -37,6 +37,18 @@ public class MySQL_ZaklList extends MySQL {
 		return priceLists;
 	}
 	
+	public int getZakIndex(String Id){
+		
+		int index=666;
+		
+		for(int i=0; i<id.size(); i++){
+			if(id.get(i).equals(Id))
+			return i;
+		}
+		
+		return index;
+	}
+	
 	public String getZakId(int Id){
 		
 		return id.get(Id);

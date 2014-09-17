@@ -34,7 +34,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +48,7 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SpringLayout;
 
+import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
 import MySQL.MySQL_ZaklList;
 
 import com.sun.org.apache.bcel.internal.generic.FNEG;
@@ -267,13 +270,14 @@ public class FormFv extends JDialog {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		fvHeadder.put("data",String.valueOf(df.format(selectedDate)));
 		
-		
 		return fvHeadder;
 	}
 	
 	public int addFv(){
 		
 		accept=0;
+		
+		setTitle("Dodawanie faktury");
 		
 		JButton btnCancel = new JButton("Anuluj");
 		fv_buttons.add(btnCancel);
@@ -324,4 +328,83 @@ public class FormFv extends JDialog {
 		return accept;
 	}
 
+	public int editFv(Map<String, String> headder, FvRowModel rows){
+		
+		accept=0;
+		
+		setTitle("Edycja faktury");
+		
+		for(int i=0; i<rows.getRowCount(); i++){
+			fvModel.addRow(rows.getRow(i));
+		}
+				
+		textNrFv.setText(headder.get("fvNr"));
+		
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c=Calendar.getInstance();
+		
+		try {
+			c.setTime(df.parse(headder.get("data")));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		datePicker.getModel().setYear(c.get(Calendar.YEAR));
+		datePicker.getModel().setMonth(c.get(Calendar.MONTH));
+		datePicker.getModel().setDay(c.get(Calendar.DAY_OF_MONTH));
+		datePicker.getModel().setSelected(true);
+		
+
+		cRodzFv.setSelectedIndex(Integer.parseInt(headder.get("rodzFv")));
+		cZaklad.setSelectedIndex(zakMod.getZakIndex(headder.get("zaklad")));
+		
+		JButton btnCancel = new JButton("Anuluj");
+		fv_buttons.add(btnCancel);
+		
+		JButton btnEdit = new JButton("Zatwierd\u017A");
+		fv_buttons.add(btnEdit);
+		
+		btnCancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				dispose();
+			}
+		});
+		
+		btnEdit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				if(fvModel.getRowCount()>0){
+					if(datePicker.getModel().isSelected()){
+						if(textNrFv.getText().equals("")){
+						accept=0;
+						JOptionPane.showMessageDialog(null, "Nie ma wpisanego numeru faktury");
+						}
+						else{
+						accept=1;
+						dispose();
+						}
+					}
+					else{
+					accept=0;
+					JOptionPane.showMessageDialog(null, "Data nie wybrana");
+					}
+				}
+				else{
+				accept=0;
+				JOptionPane.showMessageDialog(null, "Faktura nie ma ¿adnych pozycji");
+				}
+			}
+		});		
+		
+		setVisible(true);
+		
+		return accept;
+	}
 }
