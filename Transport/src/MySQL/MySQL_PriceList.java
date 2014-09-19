@@ -10,13 +10,6 @@ import javax.swing.JOptionPane;
 
 public class MySQL_PriceList extends MySQL {
 	
-//	  Vector<String[]> cache; // will hold String[] objects . . .
-//	  int colCount;
-//	  String[] headers;
-//	  MySQL_Conf conn;
-//	  Connection db;
-//	  Statement statement;
-
 	public void getPriceLists(){
 		
 		String query="SELECT * from pricelist";
@@ -34,7 +27,7 @@ public class MySQL_PriceList extends MySQL {
 		DefaultComboBoxModel<String> priceLists = new DefaultComboBoxModel<String>();
 		
 		for(int i=0; i<cache.size();i++){
-			priceLists.addElement(cache.get(i)[1]);
+			priceLists.addElement(cache.get(i)[0]);
 		}
 		
 		
@@ -74,13 +67,13 @@ public class MySQL_PriceList extends MySQL {
 		String query="UPDATE "
 				+ "`transport`.`pricelist` "
 				+ "SET "
-				+ "`nazwa` = '"+row.get(1)+"', "
-				+ "`price` = '"+row.get(2)+"', "
-				+ "`price_inw` = '"+row.get(3)+"', "
-				+ "`price_km` = '"+row.get(4)+"', "
-				+ "`price_idle` = '"+row.get(5)+"' "
+				+ "`nazwa` = '"+row.get(0)+"', "
+				+ "`price` = '"+row.get(1)+"', "
+				+ "`price_inw` = '"+row.get(2)+"', "
+				+ "`price_km` = '"+row.get(3)+"', "
+				+ "`price_idle` = '"+row.get(4)+"' "
 				+ "WHERE "
-				+ "`pricelist`.`pricelist_id` = "+row.get(0);
+				+ "`pricelist`.`pricelist_id` = "+row.get(5);
 		
 			try {
 				statement.executeUpdate(query);
@@ -108,15 +101,20 @@ public class MySQL_PriceList extends MySQL {
 		
 		setQuery(query);
 		
-		if(cache.size()>0)
-		return cache.get(0)[0];
+//		if(cache.size()>0)
+//		return cache.get(0)[0];				Stara konfiguracja
+//		else
+//		return null; 
+		
+		if(id.size()>0)
+		return id.elementAt(0);
 		else
 		return null; 
 	}
 
 	public String getPriceListName(String id){
 		
-		String query="SELECT nazwa from pricelist where pricelist_id='"+id+"'";
+		String query="SELECT pricelist_id, nazwa from pricelist where pricelist_id='"+id+"'";
 		
 		setQuery(query);
 		

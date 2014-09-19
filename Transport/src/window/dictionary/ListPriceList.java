@@ -113,8 +113,11 @@ public class ListPriceList extends JDialog {
 				for (int i=0; i<table.getColumnCount(); i++)
 				{
 				row.addElement(String.valueOf(table.getValueAt(selectedRow, i)));
-//				 row.add(String.valueOf(table.getValueAt(selectedRow, i)));
+//				 row.add(String.valueOf(table.getValueAt(selectedRow, i)));			Stara konfiguracja
 				}
+				
+				row.addElement(qtm.getId(selectedRow));
+				
 				FormPriceList lista=new FormPriceList();
 				lista.editPrice(row);
 				
@@ -129,7 +132,8 @@ public class ListPriceList extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				int selectedRow = table.getSelectedRow();
-				qtm.delPriceList(String.valueOf(table.getValueAt(selectedRow, 0)));
+//				qtm.delPriceList(String.valueOf(table.getValueAt(selectedRow, 0))); Stara konfiguracja
+				qtm.delPriceList(qtm.getId(selectedRow));
 				
 				qtm.getPriceLists();
 				Fun.resizeColumnWidth(table);

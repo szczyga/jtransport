@@ -20,6 +20,10 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+
+import print.Raport;
+
 public class ListFv extends JInternalFrame {
 	
 	private static MySQL_Fv qtm;
@@ -40,10 +44,19 @@ public class ListFv extends JInternalFrame {
     setFrameIcon(null);
     
     qtm.getFv();
-    getContentPane().setLayout(new BorderLayout(0, 0));
+    getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+    
+    JPanel buttons = new JPanel();
+    getContentPane().add(buttons);
+    buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
+    
+    JButton btnPrint = new JButton("Drukuj");
+    buttons.add(btnPrint);
+    
+
     
     JPanel panel = new JPanel();
-    getContentPane().add(panel, BorderLayout.NORTH);
+    getContentPane().add(panel);
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
                 
     JTable table = new JTable(qtm);
@@ -104,6 +117,23 @@ public class ListFv extends JInternalFrame {
 			qtm.delFv(qtm.getId(selectedRow));
 			qtm.getFv();
 			}
+		}
+	});
+    
+    btnPrint.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+			int selectedRow = table.getSelectedRow();
+			
+			if(selectedRow>-1){
+			
+				Raport print=new Raport();
+				print.print(qtm.getId(selectedRow));
+			}
+			
 		}
 	});
     

@@ -83,7 +83,8 @@ public class MySQL_Cars extends MySQL {
 			
 			setQuery(query);
 
-			return cache.get(0)[0];
+//			return cache.get(0)[0];
+			return id.elementAt(0);
 		}
 		
 		public String getCarsId(String[] params){
@@ -92,8 +93,10 @@ public class MySQL_Cars extends MySQL {
 			
 			setQuery(query);
 
-			return cache.get(0)[0];
+//			return cache.get(0)[0];
+			return id.elementAt(0);
 		}
+		
 		
 		public void editCars(String[] params){
 			

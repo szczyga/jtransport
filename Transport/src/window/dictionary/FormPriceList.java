@@ -1,15 +1,19 @@
 package window.dictionary;
 
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import MySQL.MySQL_PriceList;
+
 import java.util.Vector;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -172,11 +176,11 @@ public class FormPriceList extends JDialog {
 
 		panel_1.add(btnEdit);
 			
-		textName.setText(row.get(1));
-		textPrice.setText(row.get(2));
-		textPriceInw.setText(row.get(3));
-		textPriceKm.setText(row.get(4));
-		textPriceIdle.setText(row.get(5));
+		textName.setText(row.get(0));
+		textPrice.setText(row.get(1));
+		textPriceInw.setText(row.get(2));
+		textPriceKm.setText(row.get(3));
+		textPriceIdle.setText(row.get(4));
 
 		btnEdit.addActionListener(new ActionListener() {
 			
@@ -185,13 +189,15 @@ public class FormPriceList extends JDialog {
 				// TODO Auto-generated method stub
 				MySQL_PriceList qtm= new MySQL_PriceList();
 				
-				row.set(1, textName.getText());
-				row.set(2, textPrice.getText());
-				row.set(3, textPriceInw.getText());
-				row.set(4, textPriceKm.getText());
-				row.set(5, textPriceIdle.getText());
+				row.set(0, textName.getText());
+				row.set(1, textPrice.getText());
+				row.set(2, textPriceInw.getText());
+				row.set(3, textPriceKm.getText());
+				row.set(4, textPriceIdle.getText());
+				
 				
 				qtm.editPriceList(row);
+				
 				
 				dispose();
 			}
