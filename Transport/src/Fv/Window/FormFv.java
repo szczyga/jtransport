@@ -1,4 +1,4 @@
-package window.fv;
+package Fv.Window;
 
 
 
@@ -24,7 +24,6 @@ import java.awt.Insets;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import models.FvRowModel;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
@@ -49,7 +48,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SpringLayout;
 
 import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
-import MySQL.MySQL_ZaklList;
+import Fv.models.FvRowModel;
+import Zaklady.MySQL.MySQL_ZaklList;
 
 import com.sun.org.apache.bcel.internal.generic.FNEG;
 
@@ -108,7 +108,7 @@ public class FormFv extends JDialog {
 			JLabel lblZakad = new JLabel("Zak³ad obci¹¿any");
 			zaklad.add(lblZakad);
 			
-			cZaklad = new JComboBox<String>(zakMod.getZaklList());
+			cZaklad = new JComboBox<String>(zakMod.getZaklListCombo());
 			zaklad.add(cZaklad);
 			
 			JPanel sellDate = new JPanel();

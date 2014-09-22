@@ -1,20 +1,15 @@
-package MySQL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+package Print.MySQL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.table.AbstractTableModel;
 
-import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
-import print.DataBeanFv;
+import transport.Fun;
+import MySQL.MySQL;
+import Print.Function.DataBeanFv;
 
 public class MySQL_Print extends MySQL {
 
@@ -139,6 +134,7 @@ public class MySQL_Print extends MySQL {
 			param.put("iloczyn_idle", String.valueOf(getValueAt(0, 5)));
 			
 			param.put("suma", String.valueOf(getValueAt(0, 6)));
+			param.put("slownie", Fun.translacja(Double.parseDouble(param.get("suma"))));
 			
 			getFvKmSummary(FvId);
 			
@@ -148,7 +144,6 @@ public class MySQL_Print extends MySQL {
 			param.put("suma_200", String.valueOf(getValueAt(0, 3)));
 			param.put("suma_km", String.valueOf(getValueAt(0, 4)));
 			param.put("suma_idle", String.valueOf(getValueAt(0, 5)));
-			
 			
 			return param;
 			

@@ -1,4 +1,4 @@
-package window.cars;
+package Cars.Window;
 
 import java.awt.Dimension;
 
@@ -20,8 +20,10 @@ import javax.swing.JButton;
 
 
 
-import MySQL.MySQL_Cars;
-import MySQL.MySQL_PriceList;
+
+
+import Cars.MySQL.MySQL_Cars;
+import PriceList.MySQL.MySQL_PriceList;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;

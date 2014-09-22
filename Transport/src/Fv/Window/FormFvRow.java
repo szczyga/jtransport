@@ -1,4 +1,4 @@
-package window.fv;
+package Fv.Window;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -28,9 +28,9 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 
+import Cars.Window.ListCars;
 import sun.util.calendar.CalendarUtils;
 import sun.util.resources.cldr.CalendarData;
-import window.cars.ListCars;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;

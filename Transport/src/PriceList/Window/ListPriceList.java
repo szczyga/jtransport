@@ -1,4 +1,4 @@
-package window.dictionary;
+package PriceList.Window;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -11,8 +11,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import MySQL.MySQL_Cars;
-import MySQL.MySQL_PriceList;
+import Cars.MySQL.MySQL_Cars;
+import PriceList.MySQL.MySQL_PriceList;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -46,6 +46,7 @@ public class ListPriceList extends JDialog {
 	public static MySQL_PriceList qtm;
 	
 	private Vector<String> row; 
+	private JTable table;
 	
 	public ListPriceList() {
 
@@ -54,7 +55,7 @@ public class ListPriceList extends JDialog {
 //********Ustawienia ramki*************
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Lista cenników");
-		setSize(550, 250);
+		setSize(800, 350);
 		setLocationRelativeTo(null);
 //*******************************************		
 		setModalityType(ModalityType.APPLICATION_MODAL);//blokowanie prze³¹czania w dó³
@@ -62,14 +63,27 @@ public class ListPriceList extends JDialog {
 //*********Pobieranie samochodów**************
 		qtm = new MySQL_PriceList();
 	    qtm.getPriceLists();
+	    
+	    
+	    getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+	    
+	    JPanel buttons = new JPanel();
+	    getContentPane().add(buttons);
+	    buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
+	    
+	    JButton btnAdd = new JButton("Dodaj cennik");
+	    buttons.add(btnAdd);
+	    
+	    JButton btnEdit = new JButton("Edytuj cennik");
+	    buttons.add(btnEdit);
+	    
+	    JButton btnDel = new JButton("Usu\u0144 cennik");
+	    buttons.add(btnDel);
 //*********************************************
 	    
 //********Tworzenie tabeli z danych pobranych z bazy********
-	    JTable table = new JTable(qtm);
-	    JScrollPane scrollPane = new JScrollPane(table);
-	    	    
-	    Fun.resizeColumnWidth(table);	
-	    
+	    table = new JTable(qtm);
+	    JScrollPane scrollPane = new JScrollPane(table); 
 		getContentPane().add(scrollPane);
 		
 // Tworzenie menu na tablicy wyœwietlanej z zapytania
@@ -77,27 +91,23 @@ public class ListPriceList extends JDialog {
 		JMenuItem menuAdd = new JMenuItem("Dodaj");
 		JMenuItem menuEdit = new JMenuItem("Edytuj");
 		JMenuItem menuDel = new JMenuItem("Usuñ");
-		JMenuItem menuNr = new JMenuItem("Numer");
 		
 		popupMenu.add(menuAdd);
 		popupMenu.add(menuEdit);
 		popupMenu.add(menuDel);
-		popupMenu.add(menuNr);
 		
 		table.setComponentPopupMenu(popupMenu);
 //****************************************************		
 
+		
+		Fun.resizeColumnWidth(table);
 //Dodanie listnerów do elementów menu
 		menuAdd.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub		 
-				FormPriceList lista= new FormPriceList();
-				lista.addPrice();
-				
-				qtm.getPriceLists();
-				Fun.resizeColumnWidth(table);
+				funAdd();
 			}
 		});
 		
@@ -106,23 +116,7 @@ public class ListPriceList extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int selectedRow = table.getSelectedRow();
-				
-				row.clear();
-				
-				for (int i=0; i<table.getColumnCount(); i++)
-				{
-				row.addElement(String.valueOf(table.getValueAt(selectedRow, i)));
-//				 row.add(String.valueOf(table.getValueAt(selectedRow, i)));			Stara konfiguracja
-				}
-				
-				row.addElement(qtm.getId(selectedRow));
-				
-				FormPriceList lista=new FormPriceList();
-				lista.editPrice(row);
-				
-				qtm.getPriceLists();
-				Fun.resizeColumnWidth(table);
+				funEdit();
 			}
 		});
 		
@@ -131,25 +125,82 @@ public class ListPriceList extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int selectedRow = table.getSelectedRow();
-//				qtm.delPriceList(String.valueOf(table.getValueAt(selectedRow, 0))); Stara konfiguracja
-				qtm.delPriceList(qtm.getId(selectedRow));
-				
-				qtm.getPriceLists();
-				Fun.resizeColumnWidth(table);
+				funDel();
 			}
 		});
 		
-		menuNr.addActionListener(new ActionListener() {
+//**************************************************************		
+		
+//		Dodanie listnerów buttonów
+		
+		btnAdd.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
-				int selectedRow = table.getSelectedRow();
-				JOptionPane.showMessageDialog(null, qtm.getId(selectedRow));
+				funAdd();
 			}
 		});
-//**************************************************************		
+		
+		btnEdit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				funEdit();
+			}
+		});
+		
+		btnDel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				funDel();
+			}
+		});
+	}
+
+	
+//	Funkcje dodawania, edycji, usuwania
+	
+	private void funAdd(){
+		FormPriceList lista= new FormPriceList();
+		lista.addPrice();
+		
+		qtm.getPriceLists();
+		Fun.resizeColumnWidth(table);
+	}
+	
+	private void funEdit(){
+		int selectedRow = table.getSelectedRow();
+		
+		row.clear();
+		
+		for (int i=0; i<table.getColumnCount(); i++)
+		{
+		row.addElement(String.valueOf(table.getValueAt(selectedRow, i)));
+		}
+		
+		row.addElement(qtm.getId(selectedRow));
+		
+		FormPriceList lista=new FormPriceList();
+		lista.editPrice(row);
+		
+		qtm.getPriceLists();
+		Fun.resizeColumnWidth(table);
+	}
+	
+	private void funDel(){
+		
+		int opcja =JOptionPane.showConfirmDialog((Component) null, "Czy usun¹æ cennik?", "alert", JOptionPane.YES_NO_OPTION);
+
+		if(opcja==0){
+		int selectedRow = table.getSelectedRow();
+		qtm.delPriceList(qtm.getId(selectedRow));
+		
+		qtm.getPriceLists();
+		Fun.resizeColumnWidth(table);
+		}
 	}
 }

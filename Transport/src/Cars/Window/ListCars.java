@@ -1,4 +1,4 @@
-package window.cars;
+package Cars.Window;
 
 import java.awt.GridBagLayout;
 import java.beans.PropertyVetoException;
@@ -17,10 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import transport.Fun;
-import window.MyButton;
-import window.MyGrid;
-import MySQL.MySQL_Cars;
-import MySQL.MySQL_PriceList;
+import Cars.MySQL.MySQL_Cars;
+import PriceList.MySQL.MySQL_PriceList;
 
 import java.awt.GridBagConstraints;
 import java.awt.Dimension;
@@ -38,6 +36,10 @@ public class ListCars extends JDialog {
 	private static MySQL_Cars qtm;
 	private JPanel panel;
 	private JTable table;
+	private JPanel buttons;
+	private JButton btnAdd;
+	private JButton btnEdit;
+	private JButton btnDel;
 	
 	public ListCars() {
 		// TODO Auto-generated constructor stub
@@ -45,7 +47,7 @@ public class ListCars extends JDialog {
 //    super("Lista samochodów");
     
     setTitle("Lista samochodów");
-    setSize(600, 600);
+    setSize(800, 350);
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     setModalityType(ModalityType.APPLICATION_MODAL);//blokowanie prze³¹czania w dó³
 	qtm=new MySQL_Cars();
@@ -55,10 +57,23 @@ public class ListCars extends JDialog {
 	setLocationRelativeTo(null);
 	
     qtm.getCars();
-    getContentPane().setLayout(new BorderLayout(0, 0));
+    getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+    
+    buttons = new JPanel();
+    getContentPane().add(buttons);
+    buttons.setLayout(new BoxLayout(buttons, BoxLayout.LINE_AXIS));
+    
+    btnAdd = new JButton("Dodaj auto");
+    buttons.add(btnAdd);
+    
+    btnEdit = new JButton("Edytuj auto");
+    buttons.add(btnEdit);
+    
+    btnDel = new JButton("Usu\u0144 auto");
+    buttons.add(btnDel);
     
     panel = new JPanel();
-    getContentPane().add(panel, BorderLayout.NORTH);
+    getContentPane().add(panel);
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
                 
     table = new JTable(qtm);
@@ -70,28 +85,24 @@ public class ListCars extends JDialog {
 	JMenuItem menuEdit = new JMenuItem("Edytuj");
 	JMenuItem menuDel = new JMenuItem("Usuñ");
 	
-	JMenuItem menuID = new JMenuItem("Show id");
-	
 	popupMenu.add(menuAdd);
 	popupMenu.add(menuEdit);
 	popupMenu.add(menuDel);
-	popupMenu.add(menuID);
 	
 	table.setComponentPopupMenu(popupMenu);
 //******************************************	
     
     JScrollPane scrollpane = new JScrollPane(table);
     panel.add(scrollpane);
-//    getContentPane().add(scrollpane, gbc_scrollpane );
+
+// Definicja listnerów menu
     
     menuAdd.addActionListener(new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			FormCars car=new FormCars();
-			car.addCar();
-			qtm.getCars();
+			funAdd();
 		}
 	});
     
@@ -100,17 +111,7 @@ public class ListCars extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
-			int selectedRow = table.getSelectedRow();
-			
-			String[] params={
-					String.valueOf(table.getValueAt(selectedRow, 0)),
-					String.valueOf(table.getValueAt(selectedRow, 1)),
-					};			
-			
-			FormCars car = new FormCars();
-			car.editCar(params, new MySQL_Cars().getCarsPriceList(params));
-			qtm.getCars();
+			funEdit();
 		}
 	});
 	
@@ -119,37 +120,88 @@ public class ListCars extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
-			int selectedRow = table.getSelectedRow();
-			
-			String[] params={String.valueOf(table.getValueAt(selectedRow, 0)),String.valueOf(table.getValueAt(selectedRow, 1))};
-			qtm.delCars(params);
-			qtm.getCars();
+			funDel();
 		}
 	});
     
-    menuID.addActionListener(new ActionListener() {
+//    ********************************************
+//    Definicja listnerów buttonów
+    
+    btnAdd.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			funAdd();
+		}
+	});
+    
+    btnEdit.addActionListener(new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
-			int selectedRow = table.getSelectedRow();
-			JOptionPane.showMessageDialog(null, qtm.getId(selectedRow));
+			funEdit();
+		}
+	});
+    
+    btnDel.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			funDel();
 		}
 	});
     
 	}
 	
+	private void funAdd(){
+		FormCars car=new FormCars();
+		car.addCar();
+		qtm.getCars();
+		Fun.resizeColumnWidth(table);
+	}
+	
+	private void funEdit(){
+		
+		int selectedRow = table.getSelectedRow();
+		
+		String[] params={
+				String.valueOf(table.getValueAt(selectedRow, 0)),
+				String.valueOf(table.getValueAt(selectedRow, 1)),
+				};			
+		
+		FormCars car = new FormCars();
+		car.editCar(params, new MySQL_Cars().getCarsPriceList(params));
+		qtm.getCars();
+		Fun.resizeColumnWidth(table);
+	}
+	
+	private void funDel(){
+		
+		int opcja =JOptionPane.showConfirmDialog((Component) null, "Czy usun¹æ samochód?", "alert", JOptionPane.YES_NO_OPTION);
+
+		if(opcja==0){
+		int selectedRow = table.getSelectedRow();
+		
+		String[] params={String.valueOf(table.getValueAt(selectedRow, 0)),String.valueOf(table.getValueAt(selectedRow, 1))};
+		qtm.delCars(params);
+		qtm.getCars();
+		Fun.resizeColumnWidth(table);
+		}
+	}
+	
 	public Vector<String> selectCar(){
 		
+		JPanel pSelect =new JPanel();
+		getContentPane().add(pSelect);
+		
 		JButton select =new JButton("Wybierz");
-		panel.add(select);
+		pSelect.add(select);
 		
 		Vector<String> params=new Vector<String>();
-		
-		
-		
+
 		select.addActionListener(new ActionListener() {
 			
 			@Override
@@ -169,5 +221,6 @@ public class ListCars extends JDialog {
 		setVisible(true);
 		return params;
 	}
+
 
 }

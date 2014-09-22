@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-09-19T13:48:56 -->
+<!-- 2014-09-22T12:15:29 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="scriptlet" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="30" whenResourceMissingType="Empty" uuid="a0a4fdfd-e794-479e-829f-1a002a8b582d">
 	<property name="com.jasperassistant.designer.Grid" value="false"/>
 	<property name="com.jasperassistant.designer.SnapToGrid" value="false"/>
@@ -33,6 +33,7 @@
 	<parameter name="suma_200" class="java.lang.String"/>
 	<parameter name="suma_km" class="java.lang.String"/>
 	<parameter name="suma_idle" class="java.lang.String"/>
+	<parameter name="slownie" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -456,9 +457,9 @@ post.]]></text>
 				<textFieldExpression><![CDATA[$P{iloczyn_idle}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="-20" y="162" width="90" height="20" uuid="ae35a0a3-a080-4334-8bc1-5de70c3af932"/>
+				<reportElement x="-20" y="160" width="90" height="20" uuid="ae35a0a3-a080-4334-8bc1-5de70c3af932"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Suma]]></text>
+				<text><![CDATA[Suma do zapłaty]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="70" y="162" width="90" height="20" uuid="79ce6ca6-0747-4300-91bd-6416e882c10c"/>
@@ -494,6 +495,21 @@ post.]]></text>
 				<reportElement x="376" y="0" width="30" height="20" uuid="97f0a2d0-4cf6-4df3-a6c4-2339cfb500d7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{suma_idle}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="160" y="162" width="30" height="20" uuid="7b8931db-e03a-4dbb-8a10-6feb630acdb5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[zł]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="182" width="90" height="20" uuid="bd6840d4-9961-43a4-acdd-ef61f0a3e9c6"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Słownie:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="70" y="182" width="336" height="20" uuid="2e481340-253f-4630-929e-b2bb9c4b9fae"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{slownie}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

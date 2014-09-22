@@ -1,4 +1,4 @@
-package window.fv;
+package Fv.Window;
 
 
 import javax.swing.JInternalFrame;
@@ -10,24 +10,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import transport.Fun;
-import window.cars.FormCars;
-import MySQL.MySQL_Cars;
-import MySQL.MySQL_Fv;
+import Cars.MySQL.MySQL_Cars;
+import Cars.Window.FormCars;
+import Fv.MySQL.MySQL_Fv;
+import Print.Function.Raport;
 
 import javax.swing.BoxLayout;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import print.Raport;
-
 public class ListFv extends JInternalFrame {
 	
 	private static MySQL_Fv qtm;
-	
+	private JTable table;
 
 	public ListFv() {
 		// TODO Auto-generated constructor stub
@@ -53,14 +53,25 @@ public class ListFv extends JInternalFrame {
     JButton btnPrint = new JButton("Drukuj");
     buttons.add(btnPrint);
     
-
+    JPanel button_fun = new JPanel();
+    getContentPane().add(button_fun);
+    button_fun.setLayout(new BoxLayout(button_fun, BoxLayout.LINE_AXIS));
     
+    JButton btnAdd = new JButton("Dodaj fakture");
+    button_fun.add(btnAdd);
+    
+    JButton btnEdit = new JButton("Edytuj fakture");
+    button_fun.add(btnEdit);
+    
+    JButton btnDel = new JButton("Usu\u0144 fakture");
+    button_fun.add(btnDel);
+  
     JPanel panel = new JPanel();
     getContentPane().add(panel);
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
                 
-    JTable table = new JTable(qtm);
-    Fun.resizeColumnWidth(table);
+    table = new JTable(qtm);
+    
     
 // *********Menu siatki*************
     popupMenu = new JPopupMenu();
@@ -77,15 +88,15 @@ public class ListFv extends JInternalFrame {
     
     JScrollPane scrollpane = new JScrollPane(table);
     panel.add(scrollpane);
-//    getContentPane().add(scrollpane, gbc_scrollpane );
     
+    Fun.resizeColumnWidth(table);
+//    Definicja listnerów menu
     menuAdd.addActionListener(new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			qtm.addFv();
-			qtm.getFv();
+			funAdd();
 		}
 	});
     
@@ -94,14 +105,7 @@ public class ListFv extends JInternalFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
-			int selectedRow = table.getSelectedRow();
-			
-			if(selectedRow>-1){
-			
-			qtm.editFv(qtm.getId(selectedRow));
-			qtm.getFv();
-			}
+			funEdit();
 		}
 	});
 	
@@ -110,33 +114,95 @@ public class ListFv extends JInternalFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			int selectedRow = table.getSelectedRow();
-			
-			if(selectedRow>-1){
-				
-			qtm.delFv(qtm.getId(selectedRow));
-			qtm.getFv();
-			}
+			funDel();
 		}
 	});
+    
+//    ******************************************
+    
+//    Definicja listnerów buttonów
     
     btnPrint.addActionListener(new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
-			int selectedRow = table.getSelectedRow();
-			
-			if(selectedRow>-1){
-			
-				Raport print=new Raport();
-				print.print(qtm.getId(selectedRow));
-			}
-			
+			funPrint();
 		}
 	});
     
+    btnAdd.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			funAdd();
+		}
+	});
+    
+    btnEdit.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			funEdit();
+		}
+	});
+    
+    btnDel.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			funDel();
+		}
+	});
+    
+	}
+	
+	private void funAdd(){
+		qtm.addFv();
+		qtm.getFv();
+		Fun.resizeColumnWidth(table);
+	}
+	
+	private void funEdit(){
+		
+		int selectedRow = table.getSelectedRow();
+		
+		if(selectedRow>-1){
+		
+		qtm.editFv(qtm.getId(selectedRow));
+		qtm.getFv();
+		Fun.resizeColumnWidth(table);
+		}
+	}
+	
+	private void funDel(){
+		
+		int opcja =JOptionPane.showConfirmDialog((Component) null, "Czy usun¹æ fakturê?", "alert", JOptionPane.YES_NO_OPTION);
+
+			if(opcja==0){
+			int selectedRow = table.getSelectedRow();
+			
+			if(selectedRow>-1){
+				
+			qtm.delFv(qtm.getId(selectedRow));
+			qtm.getFv();
+			Fun.resizeColumnWidth(table);
+			}
+		}
+	}
+	
+	private void funPrint(){
+		
+		int selectedRow = table.getSelectedRow();
+		
+		if(selectedRow>-1){
+		
+			Raport print=new Raport();
+			print.print(qtm.getId(selectedRow));
+		}
 	}
 
 }

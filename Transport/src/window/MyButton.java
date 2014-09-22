@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import window.cars.FormCars;
+import Cars.Window.FormCars;
 
 
 public class MyButton extends JButton {

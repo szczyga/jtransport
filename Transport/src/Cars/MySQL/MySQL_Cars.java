@@ -1,4 +1,4 @@
-package MySQL;
+package Cars.MySQL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,6 +10,8 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
+
+import MySQL.MySQL;
 
 public class MySQL_Cars extends MySQL {
 	
@@ -24,15 +26,15 @@ public class MySQL_Cars extends MySQL {
 		public void getCars(){
 			String query="SELECT " 
 					    +"c.cars_id, "
-						+"c.name, "
-						+"c.nr_rej, "
-						+"p.price, "
-						+"p.price_inw, "
-						+"p.price_km, "
-						+"p.price_idle, "
-						+"e.price50, "
-						+"e.price100, "
-						+"e.price200 "
+						+"c.name as `Nazwa sam.`, "
+						+"c.nr_rej as `Numer rej.`, "
+						+"p.price as `Cena za godz.`, "
+						+"p.price_inw as `Cena za godz. inw.`, "
+						+"p.price_km as `Cena za km`, "
+						+"p.price_idle as `Cena za post.`, "
+						+"e.price50 as `Dodatek 50`, "
+						+"e.price100 as `Dodatek 100`, "
+						+"e.price200 as `Dodatek 200`"
 						+" FROM " 
 						+"cars c,"
 						+"extras e,"
@@ -74,6 +76,7 @@ public class MySQL_Cars extends MySQL {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Samochód u¿ywany");
 				}
 		}
 

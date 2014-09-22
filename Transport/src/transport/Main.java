@@ -1,33 +1,20 @@
 package transport;
-import java.awt.Color;
-import java.awt.GridBagLayout;
 
-import javax.swing.JButton;
+import java.awt.Color;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import window.MyButton;
-import window.MyGrid;
-import window.cars.ListCars;
-import window.dictionary.ListPriceList;
-import window.fv.ListFv;
-import MySQL.MySQL_Cars;
-
+import Cars.Window.ListCars;
+import Fv.Window.ListFv;
+import PriceList.Window.ListPriceList;
 import javax.swing.JMenuBar;
-
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
-
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
+import Zaklady.Window.ListZaklady;
 
 
 public class Main {
@@ -73,13 +60,15 @@ public class Main {
 			    menuBar.add(mnMenu);
 			    menuBar.add(mnDictionary);
 			    
-			    JMenuItem mnitmCennik = new JMenuItem("Cenniki");	    
+			    JMenuItem mnitmCennik = new JMenuItem("Cenniki");
+			    JMenuItem mnitmZaklad = new JMenuItem("Zak³ady");
 			    JMenuItem mnitmCarList = new JMenuItem("Lista samochodów");
 			    JMenuItem mnitmFv = new JMenuItem("Lista faktur");
 			    
 			    mnMenu.add(mnitmCarList);
 			    mnMenu.add(mnitmFv);
 			    mnDictionary.add(mnitmCennik);
+			    mnDictionary.add(mnitmZaklad);
 			    
 			    frame.setJMenuBar(menuBar);
 			    
@@ -102,7 +91,16 @@ public class Main {
 			}
 		});
 //********************************************************	
-	    
+	  
+	    mnitmZaklad.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ListZaklady lista=new ListZaklady();
+				lista.setVisible(true);
+			}
+		});
 //***********Listner dla pozycji menu listy samochodów**************
 	    mnitmCarList.addActionListener(new ActionListener() {
 			

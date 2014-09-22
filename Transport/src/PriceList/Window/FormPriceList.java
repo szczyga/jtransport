@@ -1,4 +1,4 @@
-package window.dictionary;
+package PriceList.Window;
 
 
 import javax.swing.JOptionPane;
@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import MySQL.MySQL_PriceList;
+import PriceList.MySQL.MySQL_PriceList;
 
 import java.util.Vector;
 import java.awt.GridBagLayout;

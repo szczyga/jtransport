@@ -1,18 +1,25 @@
-package MySQL;
+package PriceList.MySQL;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import MySQL.MySQL;
 
 public class MySQL_PriceList extends MySQL {
 	
 	public void getPriceLists(){
 		
-		String query="SELECT * from pricelist";
+
+		String query="SELECT "
+		+"`pricelist_id`, "
+		+"`nazwa`as `Nazwa cennika`, " 
+		+"`price` as `Cena za godz.`," 
+		+"`price_inw` as `Cena za godz. inw.`, " 
+		+"`price_km` as `Cena za km`, " 
+		+"`price_idle` as `Cena za post.` " 
+		+"FROM "
+		+"`pricelist`";
 		
 		setQuery(query);
 			
@@ -92,6 +99,7 @@ public class MySQL_PriceList extends MySQL {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Cennik u¿ywany");
 			}
 	}
 
@@ -100,12 +108,7 @@ public class MySQL_PriceList extends MySQL {
 		String query="SELECT pricelist_id from pricelist where nazwa='"+nazwa+"'";
 		
 		setQuery(query);
-		
-//		if(cache.size()>0)
-//		return cache.get(0)[0];				Stara konfiguracja
-//		else
-//		return null; 
-		
+				
 		if(id.size()>0)
 		return id.elementAt(0);
 		else

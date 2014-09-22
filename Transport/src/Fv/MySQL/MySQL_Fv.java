@@ -1,4 +1,4 @@
-package MySQL;
+package Fv.MySQL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,8 +13,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
-import models.FvRowModel;
-import window.fv.FormFv;
+import Fv.Window.FormFv;
+import Fv.models.FvRowModel;
+import MySQL.MySQL;
 
 public class MySQL_Fv extends MySQL {
 
@@ -25,10 +26,10 @@ public class MySQL_Fv extends MySQL {
 	public void getFv(){
 		String query="SELECT "
 				+ "fv.fv_id,"
-				+ "fv.number, "
-				+ "fv.date, "
-				+ "zaklad.name, "
-				+ "if (fv.is_inw=0, 'rozliczenie kosztowe', 'rozliczenie inwestycyjne') r_rozl "
+				+ "fv.number as `Nr faktury`, "
+				+ "fv.date as `Data faktury`, "
+				+ "zaklad.name as `Zaklad obci¹¿any`, "
+				+ "if (fv.is_inw=0, 'rozliczenie kosztowe', 'rozliczenie inwestycyjne') `Rodz. rozl.` "
 				+ " FROM "
 				+ "`fv`, "
 				+ "`zaklad` "

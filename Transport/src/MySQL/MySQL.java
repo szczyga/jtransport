@@ -6,19 +6,17 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
-
-import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 public class MySQL extends AbstractTableModel {
 
-	  Vector<String[]> cache; // will hold String[] objects . . .
+	  protected Vector<String[]> cache; // will hold String[] objects . . .
 	  int colCount;
 	  String[] headers;
-	  Vector<String> id;
+	  protected Vector<String> id;
 	  MySQL_Conf conn;
 	  Connection db;
-	  Statement statement;
+	  protected Statement statement;
 	  
 	  public MySQL() {
 		// TODO Auto-generated constructor stub
@@ -67,7 +65,7 @@ public class MySQL extends AbstractTableModel {
 	      // Now we must rebuild the headers array with the new column names
 	      headers = new String[colCount];
 	      for (int h = 1; h <= colCount; h++) {
-	        headers[h - 1] = meta.getColumnName(h+1);
+	        headers[h - 1] = meta.getColumnLabel(h+1);
 	      }
 
 	      // and file the cache with the records from our query. This would
