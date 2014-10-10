@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import transport.Fun;
 import MySQL.MySQL;
 import Print.Function.DataBeanFv;
+import Print.Function.DataBeanFvList;
 
 public class MySQL_Print extends MySQL {
 
@@ -66,7 +67,7 @@ public class MySQL_Print extends MySQL {
 					+"round(sum(`row`.`hours200`*`extras`.`price200`),2)as iloczyn_200,  "
 					+"round(sum(`row`.`km`*`pricelist`.`price_km`),2)as iloczyn_km, " 
 					+"round(sum(`row`.`idle`*`pricelist`.`price_idle`),2)as iloczyn_idle, "
-					+"round(sum(`row`.`idle`*`pricelist`.`price_idle`),2)+ "
+//					+"round(sum(`row`.`idle`*`pricelist`.`price_idle`),2)+ "
 					+"round(sum(IF(`fv`.`is_inw`=0,`row`.`hours`*`pricelist`.`price`, `row`.`hours`*`pricelist`.`price_inw`)),2)+ "
 					+"round(sum(`row`.`hours50`*`extras`.`price50`),2)+ " 
 					+"round(sum(`row`.`hours100`*`extras`.`price100`),2)+  "
@@ -186,4 +187,182 @@ public class MySQL_Print extends MySQL {
 			
 			return dataBean;
         }
+        
+        private DataBeanFvList produceListBean(Vector<String> row) {
+            DataBeanFvList dataBean = new DataBeanFvList();
+           
+			dataBean.setName(row.get(2));
+            dataBean.setNrfv(row.get(0));
+			dataBean.setSuma(row.get(3));
+
+			
+			return dataBean;
+        }
+        
+		public void getFvListParams(String []FvIds){
+			
+			
+			String FvId="";
+			
+			for(String fv:FvIds){
+			   FvId=FvId+fv+" ,";	
+			}
+			
+			FvId=FvId.substring(0, FvId.length()-1);
+			
+			
+			String query="select "
+					+ "'id', "
+					+ "max(month), "
+					+ "max(year),"
+					+ "sum(suma) "
+					+ "from "
+					+ "( "
+					+ "SELECT "
+					+ "`fv`.`fv_id`, "
+					+ "`fv`.`number`, "
+					+ "date_format(`fv`.`date`,'%c') month, "
+					+ "date_format(`fv`.`date`,'%Y') year,"
+					+ "`zaklad`.`name` as nazwa, "
+					+ "round(sum(IF(`fv`.`is_inw`=0,`row`.`hours`*`pricelist`.`price`, `row`.`hours`*`pricelist`.`price_inw`)),2)+ "
+					+ "round(sum(`row`.`hours50`*`extras`.`price50`),2)+  "
+					+ "round(sum(`row`.`hours100`*`extras`.`price100`),2)+ "
+					+ "round(sum(`row`.`hours200`*`extras`.`price200`),2)+ "
+					+ "round(sum(`row`.`km`*`pricelist`.`price_km`),2)+ "
+					+ "round(sum(`row`.`idle`*`pricelist`.`price_idle`),2)as suma "
+					+ "FROM "
+					+ "`fv`, "
+					+ "`fv_rows` `row`, "
+					+ "`cars`, "
+					+ "`pricelist`, "
+					+ "`extras`, "
+					+ "`zaklad` "
+					+ "where "
+					+ "`row`.`fv_id`=`fv`.`fv_id` and "
+					+ "`row`.`cars_id`=`cars`.`cars_id` and "
+					+ "`cars`.`pricelist_id`=`pricelist`.`pricelist_id` and "
+					+ "`cars`.`extras_id`=`extras`.`extras_id` and "
+					+ "`fv`.`zaklad_id`=`zaklad`.`zaklad_id` and "
+					+ "`fv`.`fv_id` in ("+FvId+") "
+					+ "group by "
+					+ "`fv`.`fv_id` "
+					+ ") head";
+			
+					setQuery(query);				
+		}
+		
+		public void getFvList(String []FvIds){
+					
+					
+					String FvId="";
+					
+					for(String fv:FvIds){
+					   FvId=FvId+fv+" ,";	
+					}
+					
+					FvId=FvId.substring(0, FvId.length()-1);
+					
+					
+					String query="select "
+							+ "`fv`.`fv_id`, "
+							+ "`fv`.`number`, "
+							+ "date_format(`fv`.`date`,'%c') month, "
+							+ "`zaklad`.`name` as nazwa, "
+							+ "round(sum(IF(`fv`.`is_inw`=0,`row`.`hours`*`pricelist`.`price`, `row`.`hours`*`pricelist`.`price_inw`)),2)+ "
+							+ "round(sum(`row`.`hours50`*`extras`.`price50`),2)+  "
+							+ "round(sum(`row`.`hours100`*`extras`.`price100`),2)+ "
+							+ "round(sum(`row`.`hours200`*`extras`.`price200`),2)+ "
+							+ "round(sum(`row`.`km`*`pricelist`.`price_km`),2)+ "
+							+ "round(sum(`row`.`idle`*`pricelist`.`price_idle`),2)as suma "
+							+ "FROM "
+							+ "`fv`, "
+							+ "`fv_rows` `row`, "
+							+ "`cars`, "
+							+ "`pricelist`, "
+							+ "`extras`, "
+							+ "`zaklad` "
+							+ "where "
+							+ "`row`.`fv_id`=`fv`.`fv_id` and "
+							+ "`row`.`cars_id`=`cars`.`cars_id` and "
+							+ "`cars`.`pricelist_id`=`pricelist`.`pricelist_id` and "
+							+ "`cars`.`extras_id`=`extras`.`extras_id` and "
+							+ "`fv`.`zaklad_id`=`zaklad`.`zaklad_id` and "
+							+ "`fv`.`fv_id` in ("+FvId+") "
+							+ "group by "
+							+ "`fv`.`fv_id` ";
+					
+					System.out.println(query);
+							setQuery(query);				
+				}
+
+		public Map<String, String> returnListParams(String[] FvIds){
+			
+			getFvListParams(FvIds);
+			
+			Map<String, String> param= new HashMap<String, String>();
+			
+			param.put("month", getMonth((String)getValueAt(0, 0))+" "+String.valueOf(getValueAt(0, 1)));
+			param.put("year", String.valueOf(getValueAt(0, 1)));
+			param.put("suma", String.valueOf(getValueAt(0, 2)));
+			
+			
+			return param;
+			
+		}
+		
+		public ArrayList<DataBeanFvList> returnFvListRows(String []FvIds){
+			
+			getFvList(FvIds);
+			
+			ArrayList<DataBeanFvList> lista=new ArrayList<DataBeanFvList>();
+			
+			for(int r=0; r<getRowCount();r++){
+				Vector<String> tmp=new Vector<String>();
+				for(int c=0;c<getColumnCount();c++){
+				tmp.add((String)getValueAt(r, c));
+				}
+				
+				lista.add(produceListBean(tmp));
+			}
+			
+			
+			return lista;		
+		}
+		
+		public String getMonth(String number){
+			
+		
+		String monthString="";
+		
+			switch (number) {
+	            case "1":  monthString = "Styczeñ";
+	                     break;
+	            case "2":  monthString = "Luty";
+	                     break;
+	            case "3":  monthString = "Marzec";
+	                     break;
+	            case "4":  monthString = "Kwiecieñ";
+	                     break;
+	            case "5":  monthString = "Maj";
+	                     break;
+	            case "6":  monthString = "Czerwiec";
+	                     break;
+	            case "7":  monthString = "Lipec";
+	                     break;
+	            case "8":  monthString = "Sierpieñ";
+	                     break;
+	            case "9":  monthString = "Wrzesieñ";
+	                     break;
+	            case "10": monthString = "PaŸdziernik";
+	                     break;
+	            case "11": monthString = "Listopad";
+	                     break;
+	            case "12": monthString = "Grudzieñ";
+	                     break;
+	            default: monthString = "Invalid month";
+	                     break;
+	        }
+			
+			return monthString;
+		}
 }

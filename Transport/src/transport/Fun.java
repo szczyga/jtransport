@@ -35,7 +35,20 @@ public class Fun {
 		
 		DefaultTableCellHeaderRenderer headerRenderer=new DefaultTableCellHeaderRenderer();
 		headerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		table.getColumnModel().getColumn(colNr).setHeaderRenderer(headerRenderer);
+		table.getColumnModel().getColumn(colNr).setHeaderRenderer(headerRenderer);	
+	}
+	
+	public static void setRightOneColumnText(JTable table, int colNr){
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.RIGHT );
+		table.getColumnModel().getColumn(colNr).setCellRenderer( centerRenderer );
+	}
+	
+	public static void setRightColumns(JTable table, int colStart, int colAmount){
+		
+		for(int i=colStart; i<colAmount; i++){
+		setRightOneColumnText(table, i);	
+		}
 		
 	}
 	

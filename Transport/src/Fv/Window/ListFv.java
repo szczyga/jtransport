@@ -8,26 +8,53 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SpringLayout;
 
 import transport.Fun;
 import Cars.MySQL.MySQL_Cars;
 import Cars.Window.FormCars;
+import Fv.createFvNumbers;
+import Fv.dateSelect;
 import Fv.MySQL.MySQL_Fv;
 import Print.Function.Raport;
+import Print.Function.RaportList;
 
 import javax.swing.BoxLayout;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
+
+import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
+
+import java.awt.Color;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.border.MatteBorder;
+
 public class ListFv extends JInternalFrame {
 	
 	private static MySQL_Fv qtm;
 	private JTable table;
+	
+	private JDatePickerImpl dateStart;
+	private SpringLayout springLayoutStart;
+	
+	private JDatePickerImpl dateEnd;
+	private SpringLayout springLayoutEnd;
 
 	public ListFv() {
 		// TODO Auto-generated constructor stub
@@ -40,10 +67,9 @@ public class ListFv extends JInternalFrame {
 	
     qtm=new MySQL_Fv();
     
-    setBorder(null);
     setFrameIcon(null);
-    
-    qtm.getFv();
+     
+    qtm.getFv(null,null);
     getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
     
     JPanel buttons = new JPanel();
@@ -52,6 +78,57 @@ public class ListFv extends JInternalFrame {
     
     JButton btnPrint = new JButton("Drukuj");
     buttons.add(btnPrint);
+    
+    JButton btnPrintList = new JButton("Drukuj zestawienie");
+    buttons.add(btnPrintList);
+    
+    JPanel zakres = new JPanel();
+    zakres.setBorder(new MatteBorder(1, 0, 1, 0, (Color) new Color(0, 0, 0)));
+    getContentPane().add(zakres);
+    zakres.setLayout(new BoxLayout(zakres, BoxLayout.LINE_AXIS));
+
+//    ******************Data start********************
+    
+    UtilDateModel modelStart = new UtilDateModel();
+    JDatePanelImpl datePanelStart = new JDatePanelImpl(modelStart);
+	
+	JPanel dStart = new JPanel();
+	zakres.add(dStart);
+	dStart.setLayout(new BoxLayout(dStart, BoxLayout.PAGE_AXIS));
+	
+	JLabel lblDStart = new JLabel("Data pocz\u0105tkowa");
+	dStart.add(lblDStart);
+	dateStart = new JDatePickerImpl(datePanelStart);
+	dStart.add(dateStart);
+	springLayoutStart = (SpringLayout) dateStart.getLayout();
+	springLayoutStart.putConstraint(SpringLayout.WEST, dateStart.getJFormattedTextField(), 0, SpringLayout.WEST, dateStart);
+	dateStart.setPreferredSize(new Dimension(202, 34));
+	
+//	*******************Data End************************
+	
+	JPanel dEnd = new JPanel();
+	zakres.add(dEnd);
+	dEnd.setLayout(new BoxLayout(dEnd, BoxLayout.PAGE_AXIS));
+	
+	JLabel lblDEnd = new JLabel("Data ko\u0144cowa");
+	dEnd.add(lblDEnd);
+	
+	UtilDateModel modelEnd = new UtilDateModel();
+	
+	JDatePanelImpl datePanelEnd = new JDatePanelImpl(modelEnd);
+	
+	dateEnd = new JDatePickerImpl(datePanelEnd);
+	dEnd.add(dateEnd);
+	springLayoutEnd = (SpringLayout) dateEnd.getLayout();
+	springLayoutEnd.putConstraint(SpringLayout.WEST, dateEnd.getJFormattedTextField(), 0, SpringLayout.WEST, dateEnd);
+	dateEnd.setPreferredSize(new Dimension(202, 34));
+	
+	JPanel dButton = new JPanel();
+	zakres.add(dButton);
+	dButton.setLayout(new BoxLayout(dButton, BoxLayout.PAGE_AXIS));
+	
+	JButton btnZakres = new JButton("Ustaw zakres");
+	dButton.add(btnZakres);
     
     JPanel button_fun = new JPanel();
     getContentPane().add(button_fun);
@@ -65,6 +142,13 @@ public class ListFv extends JInternalFrame {
     
     JButton btnDel = new JButton("Usu\u0144 fakture");
     button_fun.add(btnDel);
+    
+    JPanel pNumSet = new JPanel();
+    getContentPane().add(pNumSet);
+    pNumSet.setLayout(new BoxLayout(pNumSet, BoxLayout.LINE_AXIS));
+    
+    JButton btnNumSet = new JButton("Ustawienie numer\u00F3w faktur");
+    pNumSet.add(btnNumSet);
   
     JPanel panel = new JPanel();
     getContentPane().add(panel);
@@ -158,11 +242,63 @@ public class ListFv extends JInternalFrame {
 		}
 	});
     
+    btnZakres.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			setZakres();
+		}
+	});
+    
+    btnNumSet.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			setNum();
+			qtm.getFv((Date) dateStart.getModel().getValue(),(Date) dateEnd.getModel().getValue());
+			Fun.resizeColumnWidth(table);
+		}
+	});
+    
+    btnPrintList.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			funPrintList();
+		}
+	});
+    
+	}
+	
+	private void setZakres(){
+		
+		qtm.getFv((Date) dateStart.getModel().getValue(),(Date) dateEnd.getModel().getValue());
+		Fun.resizeColumnWidth(table);
+	}
+	
+	private void setNum(){
+		
+		if((Date) dateStart.getModel().getValue()!=null&&(Date) dateEnd.getModel().getValue()!=null){
+			try {
+				new createFvNumbers((Date) dateStart.getModel().getValue(), (Date) dateEnd.getModel().getValue());
+			} catch (HeadlessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else
+		JOptionPane.showMessageDialog(null, "Nie wybrano zakresu dat.");
 	}
 	
 	private void funAdd(){
 		qtm.addFv();
-		qtm.getFv();
+		
+		qtm.getFv((Date) dateStart.getModel().getValue(),(Date) dateEnd.getModel().getValue());
 		Fun.resizeColumnWidth(table);
 	}
 	
@@ -173,7 +309,7 @@ public class ListFv extends JInternalFrame {
 		if(selectedRow>-1){
 		
 		qtm.editFv(qtm.getId(selectedRow));
-		qtm.getFv();
+		qtm.getFv((Date) dateStart.getModel().getValue(),(Date) dateEnd.getModel().getValue());
 		Fun.resizeColumnWidth(table);
 		}
 	}
@@ -188,7 +324,7 @@ public class ListFv extends JInternalFrame {
 			if(selectedRow>-1){
 				
 			qtm.delFv(qtm.getId(selectedRow));
-			qtm.getFv();
+			qtm.getFv((Date) dateStart.getModel().getValue(),(Date) dateEnd.getModel().getValue());
 			Fun.resizeColumnWidth(table);
 			}
 		}
@@ -196,13 +332,38 @@ public class ListFv extends JInternalFrame {
 	
 	private void funPrint(){
 		
-		int selectedRow = table.getSelectedRow();
+		int selectedRows[]=table.getSelectedRows();
+
 		
-		if(selectedRow>-1){
+		if(selectedRows.length>0){
 		
 			Raport print=new Raport();
-			print.print(qtm.getId(selectedRow));
+			print.print(qtm.getIds(selectedRows));
 		}
+	}
+	
+	private void funPrintList(){
+		
+		int selectedRows[]=table.getSelectedRows();
+		
+		if(selectedRows.length>0){
+			
+			dateSelect data=new dateSelect();
+			
+			String dat=data.getDate();
+			
+			if(dat!=null){
+				System.out.println(dat);
+				
+				RaportList print=new RaportList();
+
+				print.print(qtm.getIds(selectedRows),dat);	
+			}
+			else
+			JOptionPane.showMessageDialog(null, "Data nie zosta³a wybrana");
+			
+		}
+		
 	}
 
 }

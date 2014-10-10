@@ -15,9 +15,12 @@ public class MySQL_Conf {
 			new com.mysql.jdbc.Driver();
 			//			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			// conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdatabase?user=testuser&password=testpassword");
-			String connectionUrl = "jdbc:mysql://localhost:3306/transport?useUnicode=true&characterEncoding=utf8";
+			String connectionUrl = "jdbc:mysql://192.168.1.200:3306/transport?useUnicode=true&characterEncoding=utf8";
 			String connectionUser = "root";
-			String connectionPassword = "";
+			String connectionPassword = "Pa$$w0rd";
+//			String connectionUrl = "jdbc:mysql://localhost:3306/transport?useUnicode=true&characterEncoding=utf8";
+//			String connectionUser = "root";
+//			String connectionPassword = "";
 			conn = DriverManager.getConnection(connectionUrl, connectionUser, connectionPassword);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

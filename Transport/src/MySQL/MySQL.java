@@ -97,6 +97,19 @@ public class MySQL extends AbstractTableModel {
 		return id.get(rowNr);
 	}
 	
+	public String[] getIds(int rowNr[]){
+		
+		int tabSize=rowNr.length;
+		
+		String ids[]=new String[tabSize];
+		
+		for(int i=0; i<rowNr.length; i++){
+			ids[i]=id.get(rowNr[i]);
+		}
+		
+		return ids;
+	}
+	
 	public String getColumnName(int i) {
 	return headers[i];
 	}

@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -23,7 +26,8 @@ public class MySQL_Fv extends MySQL {
 	String lastFvId;
 	
 /* getFV() zwraca listê faktur */	
-	public void getFv(){
+	public void getFv(Date dateStart, Date dateEnd){
+		
 		String query="SELECT "
 				+ "fv.fv_id,"
 				+ "fv.number as `Nr faktury`, "
@@ -34,8 +38,19 @@ public class MySQL_Fv extends MySQL {
 				+ "`fv`, "
 				+ "`zaklad` "
 				+ " WHERE "
-				+ "fv.zaklad_id=zaklad.zaklad_id";
+				+ "fv.zaklad_id=zaklad.zaklad_id ";
+
 		
+		if(dateStart!=null&&dateEnd!=null){
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			query+=" and date between '"+df.format(dateStart)+"' and '"+df.format(dateEnd)+"'";
+		}
+		
+		query=query+"order by "
+					+ "fv.number, "
+					+ "fv.date, "
+					+ "fv.zaklad_id";
+			
 				setQuery(query);
 	}
 

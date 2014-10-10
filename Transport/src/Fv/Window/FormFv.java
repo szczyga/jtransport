@@ -302,14 +302,8 @@ public class FormFv extends JDialog {
 				
 				if(fvModel.getRowCount()>0){
 					if(datePicker.getModel().isSelected()){
-						if(textNrFv.getText().equals("")){
-						accept=0;
-						JOptionPane.showMessageDialog(null, "Nie ma wpisanego numeru faktury");
-						}
-						else{
 						accept=1;
 						dispose();
-						}
 					}
 					else{
 					accept=0;
@@ -382,14 +376,8 @@ public class FormFv extends JDialog {
 				
 				if(fvModel.getRowCount()>0){
 					if(datePicker.getModel().isSelected()){
-						if(textNrFv.getText().equals("")){
-						accept=0;
-						JOptionPane.showMessageDialog(null, "Nie ma wpisanego numeru faktury");
-						}
-						else{
 						accept=1;
 						dispose();
-						}
 					}
 					else{
 					accept=0;

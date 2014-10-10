@@ -28,6 +28,7 @@ import javax.swing.BoxLayout;
 import java.awt.Component;
 import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -45,9 +46,11 @@ public class ListCars extends JDialog {
 		// TODO Auto-generated constructor stub
 		
 //    super("Lista samochodów");
-    
+		
+	Dimension rozmiar=Toolkit.getDefaultToolkit().getScreenSize();
+	
     setTitle("Lista samochodów");
-    setSize(800, 350);
+    setSize(rozmiar.width, rozmiar.height-50);
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     setModalityType(ModalityType.APPLICATION_MODAL);//blokowanie prze³¹czania w dó³
 	qtm=new MySQL_Cars();

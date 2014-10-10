@@ -50,6 +50,8 @@ public class Main {
 	    JDesktopPane desktop=new JDesktopPane();
 	    desktop.setBackground(new Color(204, 204, 204));
 	    
+	    frame.setExtendedState( frame.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+	    
 	    frame.setContentPane(desktop);
 	    
 		//*********Utworzenie listwy menu na górze*******************	    
@@ -107,11 +109,12 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				ListCars lista=new ListCars();
-
-//				desktop.add(lista);				
-		        
-		        lista.setVisible(true);
+				ListCars lista;
+				
+					lista = new ListCars();
+			        
+			        lista.setVisible(true);					
+							        
 			}
 		});
 //***************************************************************

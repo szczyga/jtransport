@@ -14,10 +14,10 @@ public class MySQL_PriceList extends MySQL {
 		String query="SELECT "
 		+"`pricelist_id`, "
 		+"`nazwa`as `Nazwa cennika`, " 
-		+"`price` as `Cena za godz.`," 
-		+"`price_inw` as `Cena za godz. inw.`, " 
-		+"`price_km` as `Cena za km`, " 
-		+"`price_idle` as `Cena za post.` " 
+		+" TRUNCATE(`price`,2) as `Cena za godz.`," 
+		+" TRUNCATE(`price_inw`,2) as `Cena za godz. inw.`, " 
+		+" TRUNCATE(`price_km`,2) as `Cena za km`, " 
+		+" TRUNCATE(`price_idle`,2) as `Cena za post.` " 
 		+"FROM "
 		+"`pricelist`";
 		

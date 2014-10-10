@@ -24,28 +24,30 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import Print.MySQL.MySQL_Print;
 
-public class Raport {
+public class RaportList {
 	
 	JasperPrint mainPrint;
 	
-	public Raport() {
+	public RaportList() {
 		// TODO Auto-generated constructor stub
 		mainPrint=new JasperPrint();
 		
 	}
 	
-	public void print(String[] FvId){
+	public void print(String[] FvIds, String dat){
 		
 		MySQL_Print sqlPrint=new MySQL_Print();
 		
 		Map parameters = new HashMap();
 		
-		parameters=sqlPrint.returnParams(FvId[0]);
+		parameters=sqlPrint.returnListParams(FvIds);
 		
-		ArrayList<DataBeanFv> dataBeanList=sqlPrint.returnFvRows(FvId[0]);
+		parameters.put("data", dat);
+		
+		ArrayList<DataBeanFvList> dataBeanList=sqlPrint.returnFvListRows(FvIds);
 		
 		 try {
-			InputStream inputStream = new FileInputStream ("reports/faktura.jrxml");
+			InputStream inputStream = new FileInputStream ("reports/lista_faktur.jrxml");
 
 			JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataBeanList);
 	
@@ -67,55 +69,6 @@ public class Raport {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 
-		if(FvId.length>1){
-			
-			for(int i=1; i<FvId.length; i++){
-				
-				Map parameters2 = new HashMap();
-				
-				parameters2=sqlPrint.returnParams(FvId[i]);
-				
-				ArrayList<DataBeanFv> dataBeanList2=sqlPrint.returnFvRows(FvId[i]);
-				
-				 try {
-					InputStream inputStream = new FileInputStream ("reports/faktura.jrxml");
-
-					JRBeanCollectionDataSource beanColDataSource2 = new JRBeanCollectionDataSource(dataBeanList2);
-			
-			        JasperDesign jasperDesign;
-			        
-					try {
-						jasperDesign = JRXmlLoader.load(inputStream);
-						
-				        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-				        
-				        JasperPrint jasperPrint= JasperFillManager.fillReport(jasperReport, parameters2, beanColDataSource2);
-				        
-				        List pages=jasperPrint.getPages();
-				        
-				        
-				        
-				        for(int j=0;j<pages.size();j++){
-				        	JRPrintPage object = (JRPrintPage) pages.get(j);
-				        	
-				        	mainPrint.addPage(object);
-				        }
-				        
-					} catch (JRException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-			
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}				
-				
-			}
-			
-		}
-	 
 
 		 JasperViewer.viewReport(mainPrint, false);
 	}

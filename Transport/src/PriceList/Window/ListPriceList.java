@@ -83,6 +83,9 @@ public class ListPriceList extends JDialog {
 	    
 //********Tworzenie tabeli z danych pobranych z bazy********
 	    table = new JTable(qtm);
+	    
+	    Fun.setRightColumns(table, 1, 5);
+	    
 	    JScrollPane scrollPane = new JScrollPane(table); 
 		getContentPane().add(scrollPane);
 		
@@ -170,11 +173,13 @@ public class ListPriceList extends JDialog {
 		
 		qtm.getPriceLists();
 		Fun.resizeColumnWidth(table);
+		Fun.setRightColumns(table, 1, 5);
 	}
 	
 	private void funEdit(){
 		int selectedRow = table.getSelectedRow();
 		
+		if(selectedRow!=-1){
 		row.clear();
 		
 		for (int i=0; i<table.getColumnCount(); i++)
@@ -189,18 +194,24 @@ public class ListPriceList extends JDialog {
 		
 		qtm.getPriceLists();
 		Fun.resizeColumnWidth(table);
+		Fun.setRightColumns(table, 1, 5);
+		}
 	}
 	
 	private void funDel(){
+		int selectedRow = table.getSelectedRow();
 		
+		if(selectedRow!=-1){
 		int opcja =JOptionPane.showConfirmDialog((Component) null, "Czy usun¹æ cennik?", "alert", JOptionPane.YES_NO_OPTION);
 
-		if(opcja==0){
-		int selectedRow = table.getSelectedRow();
-		qtm.delPriceList(qtm.getId(selectedRow));
-		
-		qtm.getPriceLists();
-		Fun.resizeColumnWidth(table);
+			if(opcja==0){			
+			
+			qtm.delPriceList(qtm.getId(selectedRow));
+			
+			qtm.getPriceLists();
+			Fun.resizeColumnWidth(table);
+			Fun.setRightColumns(table, 1, 5);
+			}
 		}
 	}
 }
