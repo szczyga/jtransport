@@ -6,12 +6,12 @@ public class DataBeanFv {
         private String nr_rej;
         private String date;
         private String what_do;
-        private int hours;
-        private int hours50;
-        private int hours100;
-        private int hours200;
-        private int km;
-        private int idle;
+        private double hours;
+        private double hours50;
+        private double hours100;
+        private double hours200;
+        private double km;
+        private double idle;
         private String comment;
 
         
@@ -56,61 +56,61 @@ public class DataBeanFv {
 //	    ************************
 	    
 //	    hours
-        public void setHours(int hours) {
+        public void setHours(double hours) {
             this.hours = hours;
 	    }
 	   
-	    public int getHours() {
+	    public double getHours() {
 	            return hours;
 	    }	    
 //	    ************************
 	    
 //	    hours50
-        public void setHours50(int hours50) {
+        public void setHours50(double hours50) {
             this.hours50 = hours50;
 	    }
 	   
-	    public int getHours50() {
+	    public double getHours50() {
 	            return hours50;
 	    }	    
 //	    ************************
 	    
 //	    hours100
-        public void setHours100(int hours100) {
+        public void setHours100(double hours100) {
             this.hours100 = hours100;
 	    }
 	   
-	    public int getHours100() {
+	    public double getHours100() {
 	            return hours100;
 	    }	    
 //	    ************************
 	    
 //	    hours200
-        public void setHours200(int hours200) {
+        public void setHours200(double hours200) {
             this.hours200 = hours200;
 	    }
 	   
-	    public int getHours200() {
+	    public double getHours200() {
 	            return hours200;
 	    }	    
 //	    ************************
 	    
 //	    km
-        public void setKm(int km) {
+        public void setKm(double km) {
             this.km = km;
 	    }
 	   
-	    public int getKm() {
+	    public double getKm() {
 	            return km;
 	    }	    
 //	    ************************
 	    
 //	    idle
-        public void setIdle(int idle) {
+        public void setIdle(double idle) {
             this.idle = idle;
 	    }
 	   
-	    public int getIdle() {
+	    public double getIdle() {
 	            return idle;
 	    }	    
 

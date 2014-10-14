@@ -102,12 +102,12 @@ public class MySQL_Fv extends MySQL {
 				+ "'"+row.get(0)+"', "
 				+ "'"+row.get(3)+"', "
 				+ "'"+row.get(4)+"', "
-				+ "'"+row.get(5)+"', "
-				+ "'"+row.get(6)+"', "
-				+ "'"+row.get(7)+"', "
-				+ "'"+row.get(8)+"', "
-				+ "'"+row.get(9)+"', "
-				+ "'"+row.get(10)+"', "
+				+ "'"+row.get(5).replace(',', '.')+"', "
+				+ "'"+row.get(6).replace(',', '.')+"', "
+				+ "'"+row.get(7).replace(',', '.')+"', "
+				+ "'"+row.get(8).replace(',', '.')+"', "
+				+ "'"+row.get(9).replace(',', '.')+"', "
+				+ "'"+row.get(10).replace(',', '.')+"', "
 				+ "'"+row.get(11)+"');";
 		
 		try {
@@ -203,6 +203,23 @@ public class MySQL_Fv extends MySQL {
 		}
 		
 		return row;
+	}
+	
+	public void setDate(String[] Ids, String date){
+
+		
+		for(String id : Ids){	
+			
+			String query="UPDATE `transport`.`fv` SET `date`='"+date+"' WHERE `fv_id`='"+id+"';";
+			
+			try {
+				statement.executeUpdate(query);
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 /*
  * addFv() - wywo³uje frame do zapisania nowej faktury

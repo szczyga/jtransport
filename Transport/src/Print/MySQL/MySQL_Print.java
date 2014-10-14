@@ -1,5 +1,7 @@
 package Print.MySQL;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -124,6 +126,7 @@ public class MySQL_Print extends MySQL {
 			param.put("date", String.valueOf(getValueAt(0, 1)));
 			param.put("z_name", String.valueOf(getValueAt(0, 2)));
 			param.put("r_rozl", String.valueOf(getValueAt(0, 3)));
+			param.put("miesiac", getMonth((String.valueOf(getValueAt(0, 1)).substring(5,7))));			
 			
 			getFvSummary(FvId);
 			
@@ -177,12 +180,12 @@ public class MySQL_Print extends MySQL {
 			dataBean.setNr_rej(row.get(1));
 			dataBean.setDate(row.get(2));
 			dataBean.setWhat_do(row.get(3));
-			dataBean.setHours(Integer.parseInt(row.get(4)));
-			dataBean.setHours50(Integer.parseInt(row.get(5)));
-			dataBean.setHours100(Integer.parseInt(row.get(6)));
-			dataBean.setHours200(Integer.parseInt(row.get(7)));
-			dataBean.setKm(Integer.parseInt(row.get(8)));
-			dataBean.setIdle(Integer.parseInt(row.get(9)));
+			dataBean.setHours(Double.parseDouble(row.get(4)));
+			dataBean.setHours50(Double.parseDouble(row.get(5)));
+			dataBean.setHours100(Double.parseDouble(row.get(6)));
+			dataBean.setHours200(Double.parseDouble(row.get(7)));
+			dataBean.setKm(Double.parseDouble(row.get(8)));
+			dataBean.setIdle(Double.parseDouble(row.get(9)));
 			dataBean.setComment(row.get(10));
 			
 			return dataBean;
@@ -353,6 +356,24 @@ public class MySQL_Print extends MySQL {
 	                     break;
 	            case "9":  monthString = "Wrzesieñ";
 	                     break;
+	            case "01":  monthString = "Styczeñ";
+                		 break;
+		        case "02":  monthString = "Luty";
+		                 break;
+		        case "03":  monthString = "Marzec";
+		                 break;
+		        case "04":  monthString = "Kwiecieñ";
+		                 break;
+		        case "05":  monthString = "Maj";
+		                 break;
+		        case "06":  monthString = "Czerwiec";
+		                 break;
+		        case "07":  monthString = "Lipec";
+		                 break;
+		        case "08":  monthString = "Sierpieñ";
+		                 break;
+		        case "09":  monthString = "Wrzesieñ";
+		                 break;	                       
 	            case "10": monthString = "PaŸdziernik";
 	                     break;
 	            case "11": monthString = "Listopad";

@@ -279,6 +279,17 @@ public class FormFv extends JDialog {
 		
 		setTitle("Dodawanie faktury");
 		
+		Date sysDate = new Date();
+
+		Calendar c=Calendar.getInstance();
+
+		c.setTime(sysDate);
+
+		datePicker.getModel().setYear(c.get(Calendar.YEAR));
+		datePicker.getModel().setMonth(c.get(Calendar.MONTH));
+		datePicker.getModel().setDay(c.get(Calendar.DAY_OF_MONTH));
+		datePicker.getModel().setSelected(true);
+		
 		JButton btnCancel = new JButton("Anuluj");
 		fv_buttons.add(btnCancel);
 		

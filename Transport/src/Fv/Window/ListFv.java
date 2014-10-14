@@ -336,9 +336,26 @@ public class ListFv extends JInternalFrame {
 
 		
 		if(selectedRows.length>0){
+			
+			String [] Ids=qtm.getIds(selectedRows);
+					
+			Object options[] ={"Tak","Nie"};
+			int answer = JOptionPane.showOptionDialog(null, "Zmieniæ datê faktur?", "Zmiana daty", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		
+			if(answer==0){
+				dateSelect data=new dateSelect();
+
+				String dat=data.getDateBase();
+				
+				if(dat!=null){
+					qtm.setDate(Ids, dat);
+					qtm.getFv((Date) dateStart.getModel().getValue(),(Date) dateEnd.getModel().getValue());
+					Fun.resizeColumnWidth(table);
+				}
+			}
+			
 			Raport print=new Raport();
-			print.print(qtm.getIds(selectedRows));
+			print.print(Ids);
 		}
 	}
 	

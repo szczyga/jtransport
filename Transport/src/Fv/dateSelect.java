@@ -80,5 +80,30 @@ public class dateSelect extends JDialog {
 	    setVisible(true);
 		return strDate;
 	}
+	
+	public String getDateBase(){
+		
+		strDate=null;
+		
+		JButton btnSelect = new JButton("Wybierz");
+		dStart.add(btnSelect);
+		
+	    btnSelect.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				
+				if(dateStart.getModel().getValue()!=null)
+				strDate=df.format((Date) dateStart.getModel().getValue());
+				
+				dispose();
+			}
+		});	
+		
+	    setVisible(true);
+		return strDate;
+	}
 
 }
